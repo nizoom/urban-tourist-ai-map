@@ -32,7 +32,9 @@ export const PreferenceUI = () => {
                     Cancel
                   </Button>
                 </Dialog.ActionTrigger>
-                <Button>Save</Button>
+                <Dialog.ActionTrigger asChild>
+                  <Button>Save</Button>
+                </Dialog.ActionTrigger>
               </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
                 <CloseButton size="sm" />

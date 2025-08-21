@@ -53,7 +53,6 @@ function App() {
         </Flex>
         <Spacer />
       </Flex>
-      <Button onClick={fetchData}> Sample Fetch</Button>
       <Container bg={"black"} appearance="dark" colorPalette="white">
         <MapComponent />
       </Container>

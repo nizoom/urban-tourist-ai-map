@@ -17,11 +17,12 @@ import { useTouristStore } from "../../../store.js";
 export const ResultsDrawer = () => {
   const { drawerState, toggleDrawer, loadingState, data, error } =
     useTouristStore();
-  console.log("loading state");
-  console.log(loadingState);
+  // console.log("loading state");
+  // console.log(loadingState);
+  console.log(data);
 
   return (
-    <Drawer.Root open={drawerState} onOpenChange={toggleDrawer}>
+    <Drawer.Root open={drawerState} onOpenChange={toggleDrawer} size={"lg"}>
       <Drawer.Trigger asChild>
         <Button variant="outline" color="white" _hover={{ color: "black" }}>
           Open Drawer
@@ -62,11 +63,11 @@ export const ResultsDrawer = () => {
                   {/* Image */}
                   {data.image && (
                     <Image
-                      src={data.image}
+                      src={`data:image/png;base64,${data.image}`}
                       alt={data.location}
                       borderRadius="lg"
                       w="100%"
-                      maxH="200px"
+                      maxH="250px"
                       objectFit="cover"
                     />
                   )}
@@ -79,9 +80,12 @@ export const ResultsDrawer = () => {
                     <Text fontSize="sm">{data.info}</Text>
                   </Box>
 
-                  {/* Schedule Sections */}
-                  {Object.entries(data.schedule).map(
-                    ([timeOfDay, activities]) => (
+                  {Object.entries(data.schedule || {})
+                    .filter(
+                      ([_, activities]) =>
+                        Array.isArray(activities) && activities.length > 0
+                    )
+                    .map(([timeOfDay, activities]) => (
                       <Box key={timeOfDay} w="100%">
                         <Heading size="sm" mb={2}>
                           {timeOfDay}
@@ -97,7 +101,21 @@ export const ResultsDrawer = () => {
                           ))}
                         </VStack>
                       </Box>
-                    )
+                    ))}
+                  {/* Recommendations */}
+                  {data.recommendation && data.recommendation.length > 0 && (
+                    <Box w="100%">
+                      <Heading size="sm" mb={2}>
+                        Recommendations
+                      </Heading>
+                      <VStack align="start" spacing={2}>
+                        {[...new Set(data.recommendation)].map((rec, idx) => (
+                          <Text key={idx} fontSize="sm">
+                            • {rec}
+                          </Text>
+                        ))}
+                      </VStack>
+                    </Box>
                   )}
                 </VStack>
               </Drawer.Body>
@@ -108,7 +126,12 @@ export const ResultsDrawer = () => {
             )}
 
             <Drawer.Footer>
-              <Button variant="outline" onClick={toggleDrawer}>
+              <Button
+                variant="outline"
+                color={"white"}
+                _hover={{ color: "black" }}
+                onClick={toggleDrawer}
+              >
                 Close
               </Button>
             </Drawer.Footer>
@@ -123,57 +146,40 @@ export const ResultsDrawer = () => {
   );
 };
 
-// const processImage = () => {
-//   const imgStr = data.image;
-//   // Or if you want to be more explicit:
-//   const base64String = fullDataUrl.replace("data:image/png;base64,", "");
-//   // Then you can reconstruct it if needed:
-//   const imageUrl = `data:image/png;base64,${base64String}`;
-// };
-
-// const mockData = {
-//   location: "Empire State Building, 5th Avenue, New York",
-//   info: "The Empire State Building is one of the most iconic skyscrapers in New York City...",
-//   recommendation: [
-//     "Times Square",
-//     "Central Park",
-//     "Brooklyn Bridge",
-//     "Statue of Liberty",
-//     "Museum of Modern Art",
-//   ],
-//   schedule: {
-//     Morning: [
-//       {
-//         time: "9:00am - 10:00am",
-//         activity: "Breakfast at Best Bagel & Coffee",
-//       },
-//       {
-//         time: "10:30am - 12:00pm",
-//         activity: "Visit the Empire State Building Observation Deck",
-//       },
-//     ],
-//     Afternoon: [
-//       {
-//         time: "12:30pm - 1:30pm",
-//         activity: "Lunch at Shake Shack",
-//       },
-//       {
-//         time: "2:00pm - 4:00pm",
-//         activity: "Walk around Central Park",
-//       },
-//     ],
-//     Evening: [
-//       {
-//         time: "6:00pm - 7:30pm",
-//         activity: "Dinner at Katz's Delicatessen",
-//       },
-//       {
-//         time: "8:00pm - 10:00pm",
-//         activity: "Watch a Broadway show",
-//       },
-//     ],
-//   },
-//   image:
-//     // send full png title
-//     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgCAIAAADQWCC4AA...", // base64
-// };
+// {
+//     "info": "Victoria Chambers is a building located on Paul Street, London. It is a historic building with a rich history and is now used as office space for various businesses. The building has been well-maintained and features beautiful architecture that is sure to impress visitors.\n\nThe building is situated in a prime location in London, making it easily accessible by public transportation. There are many nearby amenities such as restaurants, shops, and attractions that visitors can enjoy during their stay.\n\nThe area around Victoria Chambers is known for its vibrant atmosphere, with a mix of old and new architecture that gives it",
+//     "location": "Victoria Chambers, Paul Street, London",
+//     "recommendation": null,
+//     "schedule": {
+//         "Afternoon": [
+//             {
+//                 "activity": "Lunch at Dishoom",
+//                 "time": "1:00pm - 2:00pm"
+//             },
+//             {
+//                 "activity": "Explore Paul Street",
+//                 "time": "2:30pm - 3:30pm"
+//             }
+//         ],
+//         "Evening": [
+//             {
+//                 "activity": "Dinner at Honest Burgers",
+//                 "time": "6:00pm - 7:00pm"
+//             },
+//             {
+//                 "activity": "Drinks at The Hoxton",
+//                 "time": "7:30pm - 8:30pm"
+//             }
+//         ],
+//         "Morning": [
+//             {
+//                 "activity": "Breakfast at Clinton St. Baking Company",
+//                 "time": "9:00am - 10:00am"
+//             },
+//             {
+//                 "activity": "Visit Victoria Chambers",
+//                 "time": "10:30am - 11:30am"
+//             }
+//         ]
+//     }
+// }
