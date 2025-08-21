@@ -9,6 +9,7 @@ import {
   MdLocationCity,
   MdHotel,
 } from "react-icons/md";
+import { useTouristStore } from "../../../store";
 
 export const PreferencesCheckboxes = () => {
   const preferences = [
@@ -22,30 +23,42 @@ export const PreferencesCheckboxes = () => {
     { label: "Hotels", icon: MdHotel },
   ];
 
+  const { preferences: prefState, togglePreference } = useTouristStore();
+
   return (
     <Box bg="black" p={4} rounded="xl">
       <SimpleGrid columns={2}>
-        {preferences.map(({ label, icon: Icon }) => (
-          <CheckboxCard.Root key={label} variant={"subtle"} colorPalette="teal">
-            <CheckboxCard.HiddenInput />
-            <CheckboxCard.Control
-              p={5}
-              display="flex"
-              alignItems="center"
-              gap={5}
-              bg={"black"}
-              color="gray.100"
-              _hover={{ bg: "gray.700" }}
-              cursor={"pointer"}
+        {preferences.map(({ label, icon: Icon }) => {
+          const isChecked = prefState[label];
+
+          return (
+            <CheckboxCard.Root
+              key={label}
+              variant="subtle"
+              colorPalette="teal"
+              checked={isChecked}
+              onCheckedChange={() => togglePreference(label)}
             >
-              <Icon size={20} />
-              <CheckboxCard.Content>
-                <CheckboxCard.Label>{label}</CheckboxCard.Label>
-              </CheckboxCard.Content>
-              <CheckboxCard.Indicator color={"teal.500"} />
-            </CheckboxCard.Control>
-          </CheckboxCard.Root>
-        ))}
+              <CheckboxCard.HiddenInput />
+              <CheckboxCard.Control
+                p={5}
+                display="flex"
+                alignItems="center"
+                gap={5}
+                bg="black"
+                color="gray.100"
+                _hover={{ bg: "gray.700" }}
+                cursor="pointer"
+              >
+                <Icon size={20} />
+                <CheckboxCard.Content>
+                  <CheckboxCard.Label>{label}</CheckboxCard.Label>
+                </CheckboxCard.Content>
+                <CheckboxCard.Indicator color="teal.500" />
+              </CheckboxCard.Control>
+            </CheckboxCard.Root>
+          );
+        })}
       </SimpleGrid>
     </Box>
   );

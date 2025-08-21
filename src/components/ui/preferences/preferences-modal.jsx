@@ -6,6 +6,7 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 import { PreferencesCheckboxes } from "./checkboxes";
+
 export const PreferenceUI = () => {
   return (
     <Container>
