@@ -70,9 +70,9 @@ export const MapComponent = () => {
   return (
     <MapContainer
       center={[51.505, -0.09]}
-      zoom={13}
+      zoom={3.5}
       scrollWheelZoom={false}
-      style={{ height: "700px", width: "100%", borderRadius: "32px" }}
+      style={{ height: "700px", width: "100%", borderRadius: "24px" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
